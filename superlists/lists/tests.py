@@ -8,12 +8,17 @@ from lists.views import home_page
 from lists.models import Item
 
 # Create your tests here.
-class SmokeTest(TestCase):
+class HomePageTest(TestCase):
 
     def test_root_url_resolves_to_home_page_view(self):
         found = resolve('/')
         
         self.assertEqual(found.func, home_page)
+
+    def test_home_page_only_saves_items_when_necessary(self):
+        request = HttpRequest()
+        home_page(request)
+        self.assertEqual(Item.objects.count(), 0)
         
     def test_home_page_returns_correct_html(self):
         request = HttpRequest()
@@ -44,7 +49,7 @@ class SmokeTest(TestCase):
         response = home_page(request)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/')
+        self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
 
 
 class ItemModelTest(TestCase):
@@ -67,19 +72,14 @@ class ItemModelTest(TestCase):
         self.assertEqual(second_saved_item.text, u'두 번째 아이템')
 
 
-class HomePageTest(TestCase):
+class ListViewTest(TestCase):
 
-    def test_home_page_only_saves_items_when_necessary(self):
-        request = HttpRequest()
-        home_page(request)
-        self.assertEqual(Item.objects.count(), 0)
-        
-    def test_home_page_displays_all_list_items(self):
+    def test_displays_all_items(self):
         Item.objects.create(text='itemey 1')
         Item.objects.create(text='itemey 2')
         
-        request = HttpRequest()
-        response = home_page(request)
+        response = self.client.get('/lists/the-only-list-in-the-world/')
         
-        self.assertIn('itemey 1', response.content.decode('utf8'))
-        self.assertIn('itemey 2', response.content.decode('utf8'))
+        self.assertContains(response, 'itemey 1')
+        self.assertContains(response, 'itemey 2')
+        
