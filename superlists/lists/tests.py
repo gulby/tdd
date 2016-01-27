@@ -26,16 +26,25 @@ class SmokeTest(TestCase):
     def test_home_page_can_save_a_POST_request(self):
         request = HttpRequest()
         request.method = 'POST'
-        request.POST['item_text'] = u'신규 작업 아이템'
+        input1 = u'신규 작업 아이템'
+        request.POST['item_text'] = input1
         
         response = home_page(request)
         
-        self.assertIn(u'신규 작업 아이템', response.content.decode('utf8'))
-        expected_html = render_to_string(
-            'home.html',
-            {'new_item_text': u'신규 작업 아이템'}
-        )
-        self.assertEqual(response.content.decode('utf8'), expected_html)
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, input1)
+        
+    def test_home_page_redirects_after_POST(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        input1 = u'신규 작업 아이템'
+        request.POST['item_text'] = input1
+        
+        response = home_page(request)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/')
 
 
 class ItemModelTest(TestCase):
@@ -56,3 +65,21 @@ class ItemModelTest(TestCase):
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text, u'첫 번째 아이템')
         self.assertEqual(second_saved_item.text, u'두 번째 아이템')
+
+
+class HomePageTest(TestCase):
+
+    def test_home_page_only_saves_items_when_necessary(self):
+        request = HttpRequest()
+        home_page(request)
+        self.assertEqual(Item.objects.count(), 0)
+        
+    def test_home_page_displays_all_list_items(self):
+        Item.objects.create(text='itemey 1')
+        Item.objects.create(text='itemey 2')
+        
+        request = HttpRequest()
+        response = home_page(request)
+        
+        self.assertIn('itemey 1', response.content.decode('utf8'))
+        self.assertIn('itemey 2', response.content.decode('utf8'))
