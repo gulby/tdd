@@ -64,3 +64,5 @@ target/
 # django
 db.sqlite3
 migrations/
+/static/
+
