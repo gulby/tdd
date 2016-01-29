@@ -2,9 +2,24 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
+import sys
+from unittest import skip
 
 class NewVisitorTest(StaticLiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        for arg in sys.argv:
+            if 'liveserver' in arg:
+                cls.server_url = 'http://' + arg.split('=')[1]
+                return
+        super(NewVisitorTest, cls).setUpClass()
+        cls.server_url = cls.live_server_url
+        
+    @classmethod
+    def tearDownClass(cls):
+        if cls.server_url == cls.live_server_url:
+            super(NewVisitorTest, cls).tearDownClass()
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -21,7 +36,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         #에디스는 멋진 작업 목록 온라인 앱이 나왔다는 소식을 듣고
         #해당 웹사이트를 확인하러 갔다.
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         
         # 웹 페이지 타이틀과 헤더가 'To-Do'를 표시하고 있다.
         self.assertIn('To-Do', self.browser.title)
@@ -69,7 +84,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         
         # 프란시스가 홈페이지에 접속한다.
         # 에디스의 리스트는 보이지 않는다
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn(input1, page_text)
         self.assertNotIn(input2, page_text)
@@ -95,7 +110,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         
     def test_layout_and_styling(self):
         # 에디스는 메인 페이지를 방문한다
-        self.browser.get(self.live_server_url)
+        self.browser.get(self.server_url)
         self.browser.set_window_size(1024, 768)
         
         # 그녀는 입력 상자가 가운데 배치된 것을 본다
@@ -115,3 +130,22 @@ class NewVisitorTest(StaticLiveServerTestCase):
             512,
             delta=10,
         )
+       
+    
+    def test_cannot_add_empty_list_items(self):
+        # 에디스는 메인 페이지에 접속해서 빈 아이템을 실수로 등록하려고 한다.
+        # 입력 상자가 비어 있는 상태에서 엔터키를 누른다.
+        
+        # 페이지가 새로고침되고, 빈 아이템을 등록할 수 없다는
+        # 에러 메시지가 표시된다.
+        
+        # 다른 아이템을 입력하고 이번에는 정상 처리된다.
+        
+        # 그려는 고의적으로 다시 빈 아이템을 등록한다.
+        
+        # 리스트 페이지에 다시 에러 메시지가 표시된다.
+        
+        # 아이템을 입력하면 정상 동작한다.
+        #self.fail('write me!')
+        pass
+        
