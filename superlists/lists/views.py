@@ -36,4 +36,4 @@ def new_list(request):
         list_.delete()
         error = u'빈 아이템을 등록할 수 없습니다'
         return render(request, 'home.html', {'error': error})
-    return redirect('/lists/%d/' % (list_.id,))
+    return redirect(list_)
