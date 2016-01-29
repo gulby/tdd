@@ -11,11 +11,19 @@ def home_page(request):
     
 def view_list(request, list_id):
     list_ = List.objects.get(id=list_id)
+    error = None
+    
     if request.method == 'POST':
-        new_item_text = request.POST['item_text']
-        new_item = Item.objects.create(text=new_item_text, list=list_)
-        return redirect('/lists/%d/' % (list_.id,))
-    return render(request, 'list.html', {'list': list_})
+        try:
+            new_item_text = request.POST['item_text']
+            new_item = Item(text=new_item_text, list=list_)
+            new_item.full_clean()
+            new_item.save()
+            return redirect('/lists/%d/' % (list_.id,))
+        except ValidationError:
+            error = u'빈 아이템을 등록할 수 없습니다'
+            
+    return render(request, 'list.html', {'list': list_, 'error': error})
     
 def new_list(request):
     list_ = List.objects.create()
