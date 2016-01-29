@@ -16,8 +16,8 @@ def view_list(request, list_id):
     
     if request.method == 'POST':
         try:
-            new_item_text = request.POST['item_text']
-            new_item = Item(text=new_item_text, list=list_)
+            new_text = request.POST['text']
+            new_item = Item(text=new_text, list=list_)
             new_item.full_clean()
             new_item.save()
             return redirect('/lists/%d/' % (list_.id,))
@@ -28,8 +28,8 @@ def view_list(request, list_id):
     
 def new_list(request):
     list_ = List.objects.create()
-    new_item_text = request.POST.get('item_text')
-    item = Item(text=new_item_text, list=list_)
+    new_text = request.POST.get('text')
+    item = Item(text=new_text, list=list_)
     try:
         item.full_clean()
         item.save()

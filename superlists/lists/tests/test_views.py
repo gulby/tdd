@@ -43,7 +43,7 @@ class ListViewTest(TestCase):
         input1 = u'신규 작업 아이템'
         self.client.post(
             '/lists/new',
-            data={'item_text': input1}
+            data={'text': input1}
         )
         self.assertEqual(Item.objects.count(), 1)
         new_item = Item.objects.first()
@@ -53,7 +53,7 @@ class ListViewTest(TestCase):
         input1 = u'신규 작업 아이템'
         response = self.client.post(
             '/lists/new',
-            data={'item_text': input1}
+            data={'text': input1}
         )
         new_list = List.objects.first()
         self.assertRedirects(response, '/lists/%d/' % (new_list.id,))
@@ -71,7 +71,7 @@ class ListViewTest(TestCase):
         
         response = self.client.post(
             '/lists/%d/' % (correct_list.id,),
-            data={'item_text': u'기존 목록에 신규 아이템'},
+            data={'text': u'기존 목록에 신규 아이템'},
         )
         self.assertRedirects(response, '/lists/%d/' % (correct_list.id,))
         
@@ -86,7 +86,7 @@ class ListViewTest(TestCase):
         
         response = self.client.post(
             '/lists/%d/' % (correct_list.id,),
-            data={'item_text': u'기존 목록에 신규 아이템'},
+            data={'text': u'기존 목록에 신규 아이템'},
         )
         
         self.assertRedirects(response, '/lists/%d/' % (correct_list.id,))
@@ -95,7 +95,7 @@ class ListViewTest(TestCase):
         list_ = List.objects.create()
         response = self.client.post(
             '/lists/%d/' % (list_.id,),
-            data={'item_text': ''}
+            data={'text': ''}
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'list.html')
@@ -106,14 +106,14 @@ class ListViewTest(TestCase):
 class NewListTest(TestCase):
 
     def test_validation_errors_are_sent_back_to_hame_page_template(self):
-        response = self.client.post('/lists/new', data={'item_text': ''})
+        response = self.client.post('/lists/new', data={'text': ''})
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home.html')
         expected_error = escape(u'빈 아이템을 등록할 수 없습니다')
         self.assertContains(response, expected_error)
 
     def test_invalid_list_items_arent_saved(self):
-        self.client.post('/lists/new', data={'item_text': ''})
+        self.client.post('/lists/new', data={'text': ''})
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)
         
