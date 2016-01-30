@@ -32,9 +32,9 @@ class ItemValidationTest(FunctionalTest):
         self.assertEqual(error.text, EMPTY_LIST_ERROR)
         
         # 아이템을 입력하면 정상 동작한다.
-        #self.get_item_input_box().send_keys(u'tea 만들기\n')
-        #self.check_for_row_in_list_table(u'1: 우유 사기')
-        #self.check_for_row_in_list_table(u'2: tea 만들기')
+        self.get_item_input_box().send_keys(u'tea 만들기\n')
+        self.check_for_row_in_list_table(u'1: 우유 사기')
+        self.check_for_row_in_list_table(u'2: tea 만들기')
         
     def test_cannot_add_duplicate_items(self):
         # 에디스는 메인 페이지로 돌아가서 신규 목록을 시작한다.

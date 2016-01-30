@@ -65,4 +65,6 @@ target/
 db.sqlite3
 migrations/
 /static/
+.DS_Store
+*.swp
 
