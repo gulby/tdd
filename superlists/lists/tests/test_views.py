@@ -5,7 +5,6 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.utils.html import escape
 
-from lists.views import home_page
 from lists.models import Item, List
 from lists.forms import ItemForm, EMPTY_LIST_ERROR, DUPLICATE_ITEM_ERROR, ExistingListItemForm
 
