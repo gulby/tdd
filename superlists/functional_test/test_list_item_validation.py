@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 from .base import FunctionalTest
-from lists.forms import EMPTY_LIST_ERROR
+from lists.forms import EMPTY_LIST_ERROR, DUPLICATE_ITEM_ERROR
 
 
 class ItemValidationTest(FunctionalTest):
@@ -37,12 +37,12 @@ class ItemValidationTest(FunctionalTest):
         # 에디스는 메인 페이지로 돌아가서 신규 목록을 시작한다.
         self.browser.get(self.server_url)
         self.get_item_input_box().send_keys('buy cola\n')
-        self.check_for_row_in_list_table('buy cola')
+        self.check_for_row_in_list_table('1: buy cola')
         
         # 실수로 중복 아이템을 입력한다
         self.get_item_input_box().send_keys('buy cola\n')
         
         # 도움이 되는 에러 메시지를 본다.
-        self.check_for_row_in_list_table('buy cola')
-        error = self.browser.find_element_by_css_selector('.has error')
-        self.assertEqual(error.text, u'이미 등록한 작업입니다')
+        self.check_for_row_in_list_table('1: buy cola')
+        error = self.browser.find_element_by_css_selector('.has-error')
+        self.assertEqual(error.text, DUPLICATE_ITEM_ERROR)
