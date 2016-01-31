@@ -30,7 +30,7 @@ class LoginTest(FunctionalTest):
         # 에디스는 superlist 사이트에 접속한다.
         # 그리고 "로그인" 링크를 발견한다.
         self.browser.get(self.server_url)
-        self.browser.find_element_by_id('login').click()
+        self.browser.find_element_by_id('id_login').click()
         
         # 개인 로그인 박스가 표시된다.
         self.switch_to_new_window('Mozilla Persona')
