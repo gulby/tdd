@@ -67,4 +67,5 @@ migrations/
 /static/
 .DS_Store
 *.swp
+.del/
 
