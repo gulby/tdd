@@ -42,6 +42,11 @@ INSTALLED_APPS = (
     'accounts',
 )
 
+#AUTH_USER_MODEL = 'accounts.ListUser'
+#AUTHENTICATION_BACKENDS = (
+#    'accounts.authentication.PersonaAutheticationBackend',
+#)
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

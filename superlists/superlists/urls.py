@@ -1,4 +1,6 @@
 #-*- coding: utf-8 -*-
+from __future__ import unicode_literals
+from __future__ import print_function
 """superlists URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -21,5 +23,6 @@ from lists.views import HomePageView
 urlpatterns = [
     url(r'^$', HomePageView.as_view(), name='home'),
     url(r'^lists/', include('lists.urls')),
+    url(r'^accounts/', include('accounts.urls')),
     #url(r'^admin/', include(admin.site.urls)),
 ]
