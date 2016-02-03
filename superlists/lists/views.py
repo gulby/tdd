@@ -5,7 +5,7 @@ from django.views.generic import FormView, CreateView, DetailView
 from django.views.generic.detail import SingleObjectMixin
 
 from lists.models import Item, List
-from lists.forms import ItemForm, ExistingListItemForm
+from lists.forms import ItemForm, ExistingListItemForm, EMPTY_LIST_ERROR
 
 
 # Create your views here.
@@ -21,6 +21,16 @@ class ViewAndAddToList(CreateView, SingleObjectMixin):
     def get_form(self, form_class=ExistingListItemForm):
         self.object = self.get_object()
         return form_class(for_list=self.get_object(), data=self.request.POST)
+        
+def view_list(request, list_id):
+    list_ = List.objects.get(id=list_id)
+    form = ExistingListItemForm(for_list=list_)
+    if request.method == 'POST':
+        form = ExistingListItemForm(for_list=list_, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(list_)
+    return render(request, 'list.html', {'list': list_, 'form': form})
     
 class NewListView(CreateView):
     form_class = ItemForm
