@@ -67,6 +67,7 @@ class LoginTest(FunctionalTest):
         self.wait_to_be_logged_in()
         
         # 새로운 기능에 겁을 먹었다. 반사적으로 '로그아웃'을 클릭한다.
+        time.sleep(1)   # javascript 적용 타이밍 확보 때문
         self.browser.find_element_by_id('id_logout').click()
         self.wait_to_be_logged_out()
         
