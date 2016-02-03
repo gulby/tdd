@@ -3,6 +3,9 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 import requests
+import logging
+logger = logging.getLogger(__name__)
+
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -17,6 +20,7 @@ class PersonaAuthenticationBackend(object):
             PERSONA_VERIFY_URL,
             data={'assertion': assertion, 'audience': DOMAIN}
         )
+        
         if response.ok and response.json()['status'] == 'okay':
             email = response.json()['email']
             user = None
@@ -26,6 +30,7 @@ class PersonaAuthenticationBackend(object):
                 user = User.objects.create(email=email)
             return user
         else:
+            logger.warning('Persona says no. Json was: {}'.format(response.json()))
             return None
 
     def get_user(self, pk):
