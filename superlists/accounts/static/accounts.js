@@ -10,7 +10,9 @@ var initialize = function(navigator, user, token, urls) {
             .done(function () { window.location.reload(); })
             .fail(function () { navigator.id.logout(); })
         },
-        onlogout: function () {},
+        onlogout: function () {
+            navigator.id.logout();
+        },
     });
 };
 
