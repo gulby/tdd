@@ -50,14 +50,6 @@ class AuthenticateTest(TestCase):
         found_user = self.backend.authenticate('an assertion')
         new_user = User.objects.get(email='a@b.com')
         self.assertEqual(found_user, new_user)
-    '''
-    def test_check_context_user(self, mock_post):
-        mock_post.return_value.json.return_value = {'status': 'okay', 'email': 'a@b.com'}
-        actual_user = User.objects.create(email='a@b.com')
-        response = self.client.post('/accounts/login', {'assertion': 'an assertion'})
-        print('\nresponse : ', response.context)
-        self.assertEqual(response.context['user'], actual_user)
-    '''
         
         
 class GetUserTest(TestCase):
@@ -68,12 +60,13 @@ class GetUserTest(TestCase):
         other_user.username = 'otheruser'
         other_user.save()
         desired_user = User.objects.create(email='a@b.com')
-        found_user = backend.get_user('a@b.com')
+        found_user = backend.get_user(desired_user.pk)
         self.assertEqual(found_user, desired_user)
         
     def test_returns_none_if_no_user_with_that_email(self):
         backend = PersonaAuthenticationBackend()
+        user = User(email='a@b.com')
         self.assertIsNone(
-            backend.get_user('a@b.com')
+            backend.get_user(user.pk)
         )
         
