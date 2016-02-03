@@ -7,7 +7,8 @@ var initialize = function(navigator, user, token, urls) {
         loggedInUser: user,
         onlogin: function (assertion) {
             $.post(urls.login, {assertion: assertion, csrfmiddlewaretoken: token})
-            .done(function () { window.location.reload(); })
+            //.done(function () { window.location.reload(); })
+            .done(function () { window.alert("onlogin.done()")})
             .fail(function () { navigator.id.logout(); })
         },
         onlogout: function () {},

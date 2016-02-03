@@ -11,7 +11,13 @@
         
         <nav class="navbar navbar-default" role="navigation">
             <a class="navbar-brand" href="/">Superlists</a>
-            <a class="btn navbar-btn navbar-right" id="id_login" href="#">로그인</a>
+            email : {{ user.email }}
+            {% if user.email %}
+                <a class="btn navbar-btn navbar-right" id="id_logout" href="#">로그아웃</a>
+                <span class="navbar-text navbar-tight">로그인됨 {{ user.email }}</span>
+            {% else %}
+                <a class="btn navbar-btn navbar-right" id="id_login" href="#">로그인</a>
+            {% endif %}
         </nav>
 
         <div class="row">
@@ -29,6 +35,8 @@
                     </form>
                 </div>
             </div>
+        </div>
+        
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 {% block table %}
@@ -48,10 +56,10 @@
             var user = "{{ user.email }}" || null;
             var token = "{{ csrf_token }}";
             var urls = {
-                login: "TODO",
+                login: "{% url 'persona_login' %}",
                 logout: "TODO",
             };
-            Superlists.Accounts.initialize(navigator);
+            Superlists.Accounts.initialize(navigator, user, token, urls);
         });
     </script>
     </body>

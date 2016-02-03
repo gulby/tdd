@@ -2,17 +2,18 @@
 from django.shortcuts import redirect, render
 from django.core.exceptions import ValidationError
 from django.views.generic import FormView, CreateView, DetailView
-#from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.detail import SingleObjectMixin
 
 from lists.models import Item, List
 from lists.forms import ItemForm, ExistingListItemForm
+
 
 # Create your views here.
 class HomePageView(FormView):
     template_name = 'home.html'
     form_class = ItemForm
     
-class ViewAndAddToList(CreateView, DetailView):
+class ViewAndAddToList(CreateView, SingleObjectMixin):
     model = List
     template_name = 'list.html'
     form_class = ExistingListItemForm

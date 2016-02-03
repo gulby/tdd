@@ -43,10 +43,10 @@ class LoginTest(FunctionalTest):
         self.browser.find_element_by_tag_name('button').click()
         
         # 개인 창을 닫는다.
-        self.switch_to_new_window('To-Do')
+        self.switch_to_new_window('To-Do lists')
         
         # 로그인된 것을 알 수 있다.
-        self.wait_for_element_with_id('logout')
+        self.wait_for_element_with_id('id_logout')
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertIn('gulby@mockmyid.com', navbar.text)
         
