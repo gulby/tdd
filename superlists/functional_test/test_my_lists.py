@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
+import time
+
 from django.conf import settings
 from django.contrib.auth import BACKEND_SESSION_KEY, SESSION_KEY, get_user_model
 User = get_user_model()
@@ -44,14 +46,14 @@ class MyListTest(FunctionalTest):
         self.create_pre_authenticated_session('edith@example.com')
         
         # 메인페이지로 가서 목록 입력을 시작한다.
-        self.browser.get(self.server_url)
+        self.browser.get(self.server_url)   # 여기서 세션이 끊어진다 (!!!)
         self.get_item_input_box().send_keys('그물 만들기\n')
         self.get_item_input_box().send_keys('쇼핑하기\n')
         first_list_url = self.browser.current_url
         
         # 첫번째 아이템을 위한 "나의 목록" 링크를 발견한다.
         self.browser.find_element_by_link_text('나의 목록').click()
-        #self.assertNotEqual(first_list_url, self.browser.current_url)
+        self.assertNotEqual(first_list_url, self.browser.current_url)
         
         # 그녀가 만든 목록에 첫번째 아이템이 있는 것을 확인한다.
         self.browser.find_element_by_link_text('그물 만들기')
