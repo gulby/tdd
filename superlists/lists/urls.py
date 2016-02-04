@@ -15,10 +15,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import url
-from lists.views import NewListView, ViewAndAddToList, view_list
+from lists.views import NewListView, ViewAndAddToList, view_list, my_lists
 
 urlpatterns = [
     #url(r'^(?P<pk>\d+)/$', ViewAndAddToList.as_view(), name='view_list'),
     url(r'^(\d+)/$', view_list, name='view_list'),
     url(r'^new$', NewListView.as_view(), name='new_list'),
+    url(r'^users/(.+)/$', my_lists, name='my_lists'),
 ]
